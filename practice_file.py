@@ -1,6 +1,9 @@
 import streamlit as st
 st.write("CALCULATOR")
-a=st.number_input("number")
+a=st.number_input("number-1")
+b=st.number_input("number-2")
+
+
 col1,col2,col3,col4,col5 = st.columns(5)
 with col1:
     st.button("1")
@@ -21,4 +24,5 @@ with col4:
     st.button("sub")
     st.button("mul")
     st.button("div")
+
     
