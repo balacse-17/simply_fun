@@ -1,5 +1,24 @@
 import streamlit as st
-import random as ran
-
-st.title("Hello friends")
-st.header("vanakkam")
+st.write("CALCULATOR")
+a=st.number_input("number")
+col1,col2,col3,col4,col5 = st.columns(5)
+with col1:
+    st.button("1")
+    st.button("4")
+    st.button("7")
+with col2:
+    st.button("2")
+    st.button("5")
+    st.button("8")
+    st.button("0")
+with col3:
+    st.button("3")
+    st.button("6")
+    st.button("9")
+    st.button("=")
+with col4:
+    st.button("add")
+    st.button("sub")
+    st.button("mul")
+    st.button("div")
+    
