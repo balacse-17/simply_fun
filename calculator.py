@@ -1,3 +1,4 @@
+
 try:
     import math
     def sq(a):
