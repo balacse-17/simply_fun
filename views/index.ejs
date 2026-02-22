@@ -4,112 +4,185 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 2rem;
-        max-width: 900px;
-      }
-      h1, h2 {
-        margin-bottom: 0.6rem;
-      }
-      .grid {
-        display: grid;
-        gap: 1.5rem;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      }
-      form {
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        padding: 1rem;
-      }
-      label {
-        display: block;
-        margin-top: 0.5rem;
-        font-weight: 600;
-      }
-      input, textarea, button {
-        width: 100%;
-        margin-top: 0.4rem;
-        padding: 0.6rem;
-        font-size: 1rem;
-      }
-      button {
-        margin-top: 0.8rem;
-        cursor: pointer;
-      }
-      .status {
-        background: #f4f7ff;
-        border: 1px solid #d9e2ff;
-        padding: 0.8rem;
-        border-radius: 6px;
-        margin-bottom: 1rem;
-      }
-      ul {
-        padding-left: 1.2rem;
-      }
-      li {
-        margin-bottom: 0.8rem;
-      }
-      .muted {
-        color: #555;
-      }
-    </style>
   </head>
-  <body>
-    <h1><%= title %></h1>
-    <p class="muted">
-      This page is rendered on the server with EJS. Forms submit to Express endpoints.
+  <body style="font-family: Arial, sans-serif; margin: 2rem auto; max-width: 980px; line-height: 1.45; color: #212529;">
+    <h1 style="margin-bottom: 0.5rem;"><%= title %></h1>
+    <p style="margin-top: 0; color: #4b5563;">
+      This page uses inline styles and inline JavaScript, with server-side validation before data is stored.
     </p>
 
     <% if (statusMessage) { %>
-      <div class="status"><%= statusMessage %></div>
+      <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 0.8rem; border-radius: 8px; margin-bottom: 1rem;">
+        <%= statusMessage %>
+      </div>
     <% } %>
 
-    <section class="grid">
-      <form action="/submit-profile" method="POST">
-        <h2>Profile Form</h2>
-        <label for="fullName">Full Name</label>
-        <input id="fullName" name="fullName" type="text" required />
+    <section style="display: grid; gap: 1.2rem; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start;">
+      <form
+        action="/submit-profile"
+        method="POST"
+        onsubmit="return validateProfileForm(event)"
+        style="border: 1px solid #d1d5db; border-radius: 10px; padding: 1rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);"
+      >
+        <h2 style="margin-top: 0;">Profile Form</h2>
 
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required />
+        <label for="fullName" style="display:block; font-weight:600; margin-top: 0.5rem;">Full Name</label>
+        <input id="fullName" name="fullName" type="text" required minlength="3" maxlength="60" style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;" />
 
-        <button type="submit">Submit Profile</button>
+        <label for="email" style="display:block; font-weight:600; margin-top: 0.7rem;">Email</label>
+        <input id="email" name="email" type="email" required style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;" />
+
+        <label for="age" style="display:block; font-weight:600; margin-top: 0.7rem;">Age</label>
+        <input id="age" name="age" type="number" required min="13" max="120" style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;" />
+
+        <label for="favoriteColor" style="display:block; font-weight:600; margin-top: 0.7rem;">Favorite Color</label>
+        <input id="favoriteColor" name="favoriteColor" type="color" required value="#1d4ed8" style="width: 100%; margin-top: 0.3rem; height: 2.2rem;" oninput="document.getElementById('colorPreview').textContent=this.value" />
+        <small id="colorPreview" style="display:block; margin-top:0.3rem; color:#2563eb;">#1d4ed8</small>
+
+        <label for="bio" style="display:block; font-weight:600; margin-top: 0.7rem;">Short Bio (10-200 chars)</label>
+        <textarea id="bio" name="bio" rows="4" required minlength="10" maxlength="200" style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;"></textarea>
+
+        <label style="display:flex; align-items:center; gap:0.4rem; margin-top:0.8rem; font-size:0.95rem;">
+          <input id="newsletter" name="newsletter" type="checkbox" style="width:auto;" />
+          Subscribe to newsletter updates
+        </label>
+
+        <p id="profileError" style="color:#b91c1c; min-height:1.2rem; margin:0.7rem 0 0;"></p>
+        <button type="submit" style="margin-top: 0.6rem; width:100%; background:#2563eb; color:#fff; border:none; padding:0.65rem; border-radius:6px; cursor:pointer;">Submit Profile</button>
       </form>
 
-      <form action="/submit-feedback" method="POST">
-        <h2>Feedback Form</h2>
-        <label for="topic">Topic</label>
-        <input id="topic" name="topic" type="text" required />
+      <form
+        action="/submit-feedback"
+        method="POST"
+        onsubmit="return validateFeedbackForm(event)"
+        style="border: 1px solid #d1d5db; border-radius: 10px; padding: 1rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);"
+      >
+        <h2 style="margin-top: 0;">Feedback Form</h2>
 
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4" required></textarea>
+        <label for="topic" style="display:block; font-weight:600; margin-top: 0.5rem;">Topic</label>
+        <select id="topic" name="topic" required style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;">
+          <option value="">Select one...</option>
+          <option value="Website">Website</option>
+          <option value="Support">Support</option>
+          <option value="Feature Request">Feature Request</option>
+          <option value="Other">Other</option>
+        </select>
 
-        <button type="submit">Submit Feedback</button>
+        <label for="message" style="display:block; font-weight:600; margin-top: 0.7rem;">Message (15-500 chars)</label>
+        <textarea id="message" name="message" rows="4" required minlength="15" maxlength="500" style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;" oninput="document.getElementById('messageCounter').textContent=this.value.length + ' / 500'" ></textarea>
+        <small id="messageCounter" style="display:block; margin-top:0.2rem; color:#6b7280;">0 / 500</small>
+
+        <fieldset style="margin-top: 0.7rem; border: 1px solid #e5e7eb; border-radius: 6px; padding: 0.6rem;">
+          <legend style="font-weight:600; padding:0 0.4rem;">Sentiment</legend>
+          <label style="display:block; margin-bottom:0.2rem;"><input type="radio" name="sentiment" value="Positive" required /> Positive</label>
+          <label style="display:block; margin-bottom:0.2rem;"><input type="radio" name="sentiment" value="Neutral" required /> Neutral</label>
+          <label style="display:block;"><input type="radio" name="sentiment" value="Negative" required /> Negative</label>
+        </fieldset>
+
+        <label for="contactTime" style="display:block; font-weight:600; margin-top: 0.7rem;">Preferred Contact Time</label>
+        <select id="contactTime" name="contactTime" required style="width: 100%; margin-top: 0.3rem; padding: 0.55rem;">
+          <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
+          <option value="Evening">Evening</option>
+        </select>
+
+        <label for="rating" style="display:block; font-weight:600; margin-top: 0.7rem;">Rating (1-5)</label>
+        <input id="rating" name="rating" type="range" min="1" max="5" value="3" style="width: 100%; margin-top:0.3rem;" oninput="document.getElementById('ratingValue').textContent=this.value" />
+        <small style="display:block; margin-top:0.2rem;">Selected: <strong id="ratingValue">3</strong></small>
+
+        <p id="feedbackError" style="color:#b91c1c; min-height:1.2rem; margin:0.7rem 0 0;"></p>
+        <button type="submit" style="margin-top: 0.6rem; width:100%; background:#0f766e; color:#fff; border:none; padding:0.65rem; border-radius:6px; cursor:pointer;">Submit Feedback</button>
       </form>
     </section>
 
-    <section>
-      <h2>Submitted Data (Server-Side Rendered)</h2>
+    <section style="margin-top: 1.5rem;">
+      <h2 style="margin-bottom:0.5rem;">Validated Data (Temporary Server Storage)</h2>
       <% if (!submissions.length) { %>
-        <p>No submissions yet.</p>
+        <p style="margin-top:0;">No submissions yet.</p>
       <% } else { %>
-        <ul>
+        <ul style="padding-left: 1.2rem;">
           <% submissions.forEach((entry) => { %>
-            <li>
+            <li style="margin-bottom: 0.8rem;">
               <strong><%= entry.formType %></strong>
-              <span class="muted">(<%= entry.createdAt %>)</span>
+              <span style="color:#6b7280;">(<%= entry.createdAt %>)</span>
               <br />
               <% if (entry.formType === 'Profile') { %>
-                Name: <%= entry.fullName %>, Email: <%= entry.email %>
+                Name: <%= entry.fullName %>, Email: <%= entry.email %>, Age: <%= entry.age %>, Color: <%= entry.favoriteColor %>, Newsletter: <%= entry.newsletter ? 'Yes' : 'No' %>
               <% } else { %>
-                Topic: <%= entry.topic %>, Message: <%= entry.message %>
+                Topic: <%= entry.topic %>, Sentiment: <%= entry.sentiment %>, Contact: <%= entry.contactTime %>, Rating: <%= entry.rating %>/5, Message: <%= entry.message %>
               <% } %>
             </li>
           <% }); %>
         </ul>
       <% } %>
     </section>
+
+    <script>
+      function validateProfileForm(event) {
+        const form = event.target;
+        const errorElement = document.getElementById('profileError');
+        errorElement.textContent = '';
+
+        const fullName = form.fullName.value.trim();
+        const email = form.email.value.trim();
+        const age = Number.parseInt(form.age.value, 10);
+        const bio = form.bio.value.trim();
+
+        if (fullName.length < 3 || fullName.length > 60) {
+          errorElement.textContent = 'Full name must be 3 to 60 characters.';
+          return false;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          errorElement.textContent = 'Please enter a valid email address.';
+          return false;
+        }
+
+        if (!Number.isInteger(age) || age < 13 || age > 120) {
+          errorElement.textContent = 'Age must be between 13 and 120.';
+          return false;
+        }
+
+        if (bio.length < 10 || bio.length > 200) {
+          errorElement.textContent = 'Bio must be 10 to 200 characters.';
+          return false;
+        }
+
+        return true;
+      }
+
+      function validateFeedbackForm(event) {
+        const form = event.target;
+        const errorElement = document.getElementById('feedbackError');
+        errorElement.textContent = '';
+
+        const topic = form.topic.value;
+        const message = form.message.value.trim();
+        const sentiment = form.sentiment.value;
+        const rating = Number.parseInt(form.rating.value, 10);
+
+        if (!topic) {
+          errorElement.textContent = 'Please choose a topic.';
+          return false;
+        }
+
+        if (message.length < 15 || message.length > 500) {
+          errorElement.textContent = 'Message must be 15 to 500 characters.';
+          return false;
+        }
+
+        if (!sentiment) {
+          errorElement.textContent = 'Please select sentiment.';
+          return false;
+        }
+
+        if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+          errorElement.textContent = 'Rating must be between 1 and 5.';
+          return false;
+        }
+
+        return true;
+      }
+    </script>
   </body>
 </html>
