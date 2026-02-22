@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 2rem;
+        max-width: 900px;
+      }
+      h1, h2 {
+        margin-bottom: 0.6rem;
+      }
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+      form {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+      label {
+        display: block;
+        margin-top: 0.5rem;
+        font-weight: 600;
+      }
+      input, textarea, button {
+        width: 100%;
+        margin-top: 0.4rem;
+        padding: 0.6rem;
+        font-size: 1rem;
+      }
+      button {
+        margin-top: 0.8rem;
+        cursor: pointer;
+      }
+      .status {
+        background: #f4f7ff;
+        border: 1px solid #d9e2ff;
+        padding: 0.8rem;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+      }
+      ul {
+        padding-left: 1.2rem;
+      }
+      li {
+        margin-bottom: 0.8rem;
+      }
+      .muted {
+        color: #555;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p class="muted">
+      This page is rendered on the server with EJS. Forms submit to Express endpoints.
+    </p>
+
+    <% if (statusMessage) { %>
+      <div class="status"><%= statusMessage %></div>
+    <% } %>
+
+    <section class="grid">
+      <form action="/submit-profile" method="POST">
+        <h2>Profile Form</h2>
+        <label for="fullName">Full Name</label>
+        <input id="fullName" name="fullName" type="text" required />
+
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required />
+
+        <button type="submit">Submit Profile</button>
+      </form>
+
+      <form action="/submit-feedback" method="POST">
+        <h2>Feedback Form</h2>
+        <label for="topic">Topic</label>
+        <input id="topic" name="topic" type="text" required />
+
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <button type="submit">Submit Feedback</button>
+      </form>
+    </section>
+
+    <section>
+      <h2>Submitted Data (Server-Side Rendered)</h2>
+      <% if (!submissions.length) { %>
+        <p>No submissions yet.</p>
+      <% } else { %>
+        <ul>
+          <% submissions.forEach((entry) => { %>
+            <li>
+              <strong><%= entry.formType %></strong>
+              <span class="muted">(<%= entry.createdAt %>)</span>
+              <br />
+              <% if (entry.formType === 'Profile') { %>
+                Name: <%= entry.fullName %>, Email: <%= entry.email %>
+              <% } else { %>
+                Topic: <%= entry.topic %>, Message: <%= entry.message %>
+              <% } %>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+  </body>
+</html>
