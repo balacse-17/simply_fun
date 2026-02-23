@@ -6,6 +6,10 @@ const port = process.env.PORT || 3000;
 
 const submissions = [];
 
+const ALLOWED_TOPICS = ['Website', 'Support', 'Feature Request', 'Other'];
+const ALLOWED_SENTIMENTS = ['Positive', 'Neutral', 'Negative'];
+const ALLOWED_CONTACT_TIMES = ['Morning', 'Afternoon', 'Evening'];
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -23,9 +27,14 @@ const parseRating = (value) => {
 };
 
 app.get('/', (req, res) => {
+  const profileCount = submissions.filter((item) => item.formType === 'Profile').length;
+  const feedbackCount = submissions.filter((item) => item.formType === 'Feedback').length;
+
   res.render('index', {
     title: 'Task 2: Inline Styles, Validation, and Interaction',
     submissions,
+    profileCount,
+    feedbackCount,
     statusMessage: req.query.status || ''
   });
 });
@@ -54,7 +63,11 @@ app.post('/submit-profile', (req, res) => {
     return res.redirect('/?status=Bio+must+be+between+10+and+200+characters.');
   }
 
-  submissions.push({
+  if (!hasLength(bio, 10, 200)) {
+    return res.redirect('/?status=Bio+must+be+between+10+and+200+characters.');
+  }
+
+  storeSubmission({
     formType: 'Profile',
     fullName: fullName.trim(),
     email: email.trim().toLowerCase(),
@@ -92,7 +105,21 @@ app.post('/submit-feedback', (req, res) => {
     return res.redirect('/?status=Please+provide+a+rating+between+1+and+5.');
   }
 
-  submissions.push({
+  if (!ALLOWED_SENTIMENTS.includes(sentiment)) {
+    return res.redirect('/?status=Please+choose+a+valid+sentiment+option.');
+  }
+
+  if (!ALLOWED_CONTACT_TIMES.includes(contactTime)) {
+    return res.redirect('/?status=Please+choose+a+valid+preferred+contact+time.');
+  }
+
+  if (rating === null) {
+    return res.redirect('/?status=Please+provide+a+rating+between+1+and+5.');
+  }
+
+  const aiHints = pickFeedbackHints(message);
+
+  storeSubmission({
     formType: 'Feedback',
     topic,
     message: message.trim(),
