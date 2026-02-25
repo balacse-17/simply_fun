@@ -1,0 +1,32 @@
+body {
+  background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #eff6ff 100%);
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(120deg, #1d4ed8, #7c3aed);
+}
+
+.route-view {
+  animation: fadeIn 180ms ease-in;
+}
+
+.activity-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.activity-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(30, 64, 175, 0.16);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
