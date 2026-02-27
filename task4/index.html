@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 4 · Validation, Dynamic DOM, Client-Side Routing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="container py-4">
+      <div class="hero rounded-4 p-4 p-md-5 shadow-sm text-white">
+        <h1 class="mb-2">Task 4: Complex Validation + Dynamic DOM + Client Routing</h1>
+        <p class="mb-0 opacity-75">Single-page style experience with hash routes, dynamic UI cards, and stronger form rules.</p>
+      </div>
+    </header>
+
+    <nav class="container mb-3">
+      <ul class="nav nav-pills gap-2" id="routeNav">
+        <li class="nav-item"><a class="nav-link route-link" href="#/">Home</a></li>
+        <li class="nav-item"><a class="nav-link route-link" href="#/register">Register</a></li>
+        <li class="nav-item"><a class="nav-link route-link" href="#/activity">Activity</a></li>
+      </ul>
+    </nav>
+
+    <main class="container pb-5">
+      <section id="view-home" class="route-view card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h4">Welcome</h2>
+          <p class="text-secondary mb-0">Use the top navigation to switch sections instantly with client-side routing.</p>
+        </div>
+      </section>
+
+      <section id="view-register" class="route-view card border-0 shadow-sm d-none">
+        <div class="card-body p-4">
+          <h2 class="h4 mb-3">Create Account</h2>
+
+          <form id="registerForm" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="fullName" class="form-label">Full Name</label>
+                <input id="fullName" name="fullName" type="text" class="form-control" placeholder="Ada Lovelace" />
+                <div class="invalid-feedback" id="fullNameError"></div>
+              </div>
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" name="email" type="email" class="form-control" placeholder="ada@example.com" />
+                <div class="invalid-feedback" id="emailError"></div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" type="password" class="form-control" />
+                <div class="form-text" id="strengthText">Strength: --</div>
+                <div class="progress mt-2" role="progressbar" aria-label="Password strength">
+                  <div id="strengthBar" class="progress-bar" style="width: 0%;"></div>
+                </div>
+                <div class="invalid-feedback" id="passwordError"></div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" class="form-control" />
+                <div class="invalid-feedback" id="confirmPasswordError"></div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="age" class="form-label">Age</label>
+                <input id="age" name="age" type="number" class="form-control" min="13" max="120" />
+                <div class="invalid-feedback" id="ageError"></div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="role" class="form-label">Role</label>
+                <select id="role" name="role" class="form-select">
+                  <option value="">Choose role...</option>
+                  <option value="Designer">Designer</option>
+                  <option value="Developer">Developer</option>
+                  <option value="Product Manager">Product Manager</option>
+                  <option value="QA Engineer">QA Engineer</option>
+                </select>
+                <div class="invalid-feedback" id="roleError"></div>
+              </div>
+            </div>
+
+            <div class="mt-3 d-flex flex-wrap gap-2">
+              <button type="submit" class="btn btn-primary">Create Account</button>
+              <button type="button" class="btn btn-outline-secondary" id="autofillBtn">Auto-fill Demo Data</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section id="view-activity" class="route-view d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h4 mb-0">Recent Client-Side Activity</h2>
+          <button type="button" class="btn btn-sm btn-outline-danger" id="clearActivityBtn">Clear</button>
+        </div>
+        <div id="activityContainer" class="row g-3"></div>
+        <p id="emptyState" class="text-secondary mt-3">No activity yet. Submit the registration form to generate dynamic cards.</p>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
