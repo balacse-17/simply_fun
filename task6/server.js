@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/auth');
 const submissionRoutes = require('./routes/submissions');
@@ -9,8 +10,9 @@ const app = express();
 const port = process.env.PORT || 4280;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (_req, res) => {
+app.get('/api', (_req, res) => {
   return res.json({
     message: 'Task 6 API running.',
     endpoints: {

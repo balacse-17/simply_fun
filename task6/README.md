@@ -1,6 +1,6 @@
 # Task 6: Database Integration + User Authentication
 
-This folder is a standalone backend for Task 6. It is intentionally separate from previous tasks.
+This folder is a standalone full-stack demo for Task 6 (frontend + backend), intentionally separate from previous tasks.
 
 ## 1) Where to add MySQL credentials (placeholders)
 Copy `.env.example` to `.env` and update these fields:
@@ -31,10 +31,13 @@ From repo root:
 npm install express mysql2 bcryptjs jsonwebtoken dotenv
 ```
 
-## 4) Start Task 6 API
+## 4) Start Task 6 API + Frontend
 ```bash
 node task6/server.js
 ```
+
+Frontend URL:
+- `http://localhost:4280`
 
 ## 5) API flow
 1. Register user: `POST /api/auth/register`
@@ -45,18 +48,13 @@ node task6/server.js
    - `GET /api/submissions`
    - `POST /api/submissions`
 
-## Example payloads
-### Register
-```json
-{ "name": "Alice Doe", "email": "alice@example.com", "password": "StrongPass#2026" }
-```
+## Task 6 frontend files
+- `task6/public/index.html`
+- `task6/public/app.js`
+- `task6/public/styles.css`
 
-### Login
-```json
-{ "email": "alice@example.com", "password": "StrongPass#2026" }
-```
-
-### Create submission (authenticated)
-```json
-{ "title": "My Entry", "content": "This is secured user content." }
-```
+The frontend includes:
+- Register form
+- Login form
+- Authenticated submission creation
+- Listing authenticated submissions
